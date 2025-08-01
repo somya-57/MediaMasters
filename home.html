@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Media Masters | Home</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    :root {
+      --red: #b22222;
+      --dark: #111;
+      --light: #fdf6f6;
+      --white: #fff;
+      --transition: all 0.3s ease;
+      --gradient: linear-gradient(135deg, #b22222 0%, #8b1a1a 100%);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--light);
+      color: var(--dark);
+      line-height: 1.6;
+    }
+
+    header {
+      background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+      background-size: cover;
+      background-position: center;
+      color: var(--white);
+      padding: 100px 20px 60px;
+      text-align: center;
+      position: relative;
+    }
+
+    .loading-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--white);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.5s ease;
+    }
+
+    .loading-screen.fade-out {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .loader {
+      width: 50px;
+      height: 50px;
+      border: 3px solid var(--light);
+      border-top-color: var(--red);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .logo-container {
+      max-width: 800px;
+      margin: auto;
+      animation: fadeInUp 1s ease-out;
+    }
+
+    .logo {
+      font-size: 3.5rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .logo span {
+      color: var(--white);
+      background-color: var(--red);
+      padding: 2px 10px;
+      border-radius: 4px;
+    }
+
+    .tagline {
+      font-size: 1.4rem;
+      font-weight: 300;
+      color: #ffe5e5;
+      margin-bottom: 30px;
+      animation: fadeInUp 1s ease-out 0.3s backwards;
+    }
+
+    .cta-button {
+      display: inline-block;
+      background-color: var(--red);
+      color: var(--white);
+      padding: 12px 30px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: var(--transition);
+      margin-top: 20px;
+      animation: fadeInUp 1s ease-out 0.6s backwards;
+    }
+
+    .cta-button:hover {
+      background-color: #8b1a1a;
+      transform: translateY(-3px);
+    }
+
+    nav {
+      background-color: var(--red);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .nav-container {
+      max-width: 1100px;
+      margin: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+    }
+
+    nav a {
+      color: var(--white);
+      text-decoration: none;
+      font-weight: 500;
+      padding: 8px 15px;
+      border-radius: 4px;
+      transition: var(--transition);
+    }
+
+    nav a:hover, nav a.active {
+      background-color: rgba(255,255,255,0.1);
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: auto;
+      padding: 60px 20px;
+    }
+
+    .section-title {
+      font-size: 2.2rem;
+      color: var(--red);
+      margin-bottom: 30px;
+      text-align: center;
+      position: relative;
+    }
+
+    .section-title::after {
+      content: '';
+      display: block;
+      width: 60px;
+      height: 3px;
+      background-color: var(--red);
+      margin: 10px auto;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      margin-top: 30px;
+    }
+
+    .card {
+      background-color: var(--white);
+      padding: 30px;
+      border-left: 5px solid var(--red);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      transition: var(--transition);
+      border-radius: 8px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--gradient);
+      opacity: 0;
+      transition: var(--transition);
+      z-index: 1;
+    }
+
+    .card:hover::before {
+      opacity: 0.05;
+    }
+
+    .card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+
+    .card h3 {
+      position: relative;
+      z-index: 2;
+    }
+
+    .card ul {
+      position: relative;
+      z-index: 2;
+    }
+
+    .card ul li {
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+    }
+
+    .card ul li::before {
+      content: '✔';
+      color: var(--red);
+      margin-right: 10px;
+      font-weight: bold;
+    }
+
+    .testimonials {
+      background-color: #fff3f3;
+      padding: 60px 20px;
+    }
+
+    .testimonial-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      margin-top: 30px;
+    }
+
+    .testimonial {
+      background-color: var(--white);
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    }
+
+    .testimonial-text {
+      font-style: italic;
+      margin-bottom: 20px;
+    }
+
+    .testimonial-author {
+      font-weight: 600;
+      color: var(--red);
+    }
+
+    .contact-section {
+      background-color: var(--dark);
+      color: var(--white);
+      padding: 60px 20px;
+    }
+
+    .contact-container {
+      max-width: 1100px;
+      margin: auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 40px;
+    }
+
+    .contact-info h2, .contact-form h2 {
+      margin-bottom: 20px;
+      color: var(--white);
+    }
+
+    .contact-info p {
+      margin: 10px 0;
+      display: flex;
+      align-items: center;
+    }
+
+    .contact-info i {
+      margin-right: 10px;
+      color: var(--red);
+    }
+
+    .contact-form form {
+      display: grid;
+      gap: 15px;
+    }
+
+    .form-group {
+      display: grid;
+      gap: 5px;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      padding: 12px;
+      border: none;
+      border-radius: 4px;
+      background-color: rgba(255,255,255,0.1);
+      color: var(--white);
+    }
+
+    .form-group textarea {
+      height: 150px;
+      resize: vertical;
+    }
+
+    .submit-btn {
+      background-color: var(--red);
+      color: var(--white);
+      padding: 12px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .submit-btn:hover {
+      background-color: #8b1a1a;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .social-links a {
+      color: var(--white);
+      font-size: 1.5rem;
+      transition: var(--transition);
+    }
+
+    .social-links a:hover {
+      color: var(--red);
+    }
+
+    .back-to-top {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: var(--gradient);
+      color: var(--white);
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      visibility: hidden;
+      transition: var(--transition);
+      z-index: 1000;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .back-to-top.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+    nav{
+      padding: 0cm;
+    }
+
+    .back-to-top:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .logo {
+        font-size: 2.5rem;
+      }
+      
+      .nav-container {
+        flex-direction: column;
+        gap: 10px;
+      }
+      
+      .contact-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Team Section Styles */
+    .team-section {
+      background-color: var(--white);
+      padding: 60px 20px;
+    }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+      margin-top: 30px;
+    }
+
+    .team-member {
+      background: var(--white);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      transition: var(--transition);
+      text-align: center;
+    }
+
+    .team-member:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .member-image {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      margin: 20px auto;
+      overflow: hidden;
+      border: 3px solid var(--red);
+    }
+
+    .member-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .member-info {
+      padding: 20px;
+    }
+
+    .member-name {
+      font-size: 1.2rem;
+      color: var(--dark);
+      margin-bottom: 5px;
+    }
+
+    .member-role {
+      color: var(--red);
+      font-size: 0.9rem;
+      margin-bottom: 15px;
+    }
+
+    .member-contact {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 15px;
+      padding-bottom: 20px;
+    }
+
+    .member-contact a {
+      color: var(--dark);
+      font-size: 1.2rem;
+      transition: var(--transition);
+    }
+
+    .member-contact a:hover {
+      color: var(--red);
+      transform: scale(1.1);
+    }
+  </style>
+</head>
+<body>
+  <div class="loading-screen">
+    <div class="loader"></div>
+  </div>
+
+  <header>
+    <div class="logo-container">
+      <div class="logo"><span>Media</span> MASTERS</div>
+      <p class="tagline">Creative Designs. Quality Printing. Reliable Installations.</p>
+      <a href="#contact" class="cta-button">Get in Touch</a>
+    </div>
+  </header>
+
+  <nav>
+    <div class="nav-container">
+      <a href="home page mm.html" class="active">Home</a>
+      <a href="services.html">Services</a>
+      <a href="portfolio.html">Portfolio</a>
+      <a href="about.html">About</a>
+      <a href="faq.html">FAQ</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </nav>
+
+  <div class="container" id="services">
+    <h2 class="section-title">Our Services</h2>
+
+    <div class="card-grid">
+      <div class="card">
+        <h3>Logo Design</h3>
+        <ul>
+          <li>Custom Concept Creation</li>
+          <li>Multiple Revisions</li>
+          <li>High-Resolution Formats</li>
+          <li>Brand Guidelines</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Flex Printing</h3>
+        <ul>
+          <li>Indoor & Outdoor Printing</li>
+          <li>UV / Eco-Solvent Inks</li>
+          <li>Weatherproof Materials</li>
+          <li>Large Format Printing</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Installation Services</h3>
+        <ul>
+          <li>On-site Support</li>
+          <li>Safe & Secure Mounting</li>
+          <li>Timely Completion</li>
+          <li>Quality Assurance</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="testimonials" id="testimonials">
+    <div class="container">
+      <h2 class="section-title">What Our Clients Say</h2>
+      <div class="testimonial-grid">
+        <div class="testimonial">
+          <p class="testimonial-text">"Media Masters delivered exceptional quality and service. Their attention to detail and professionalism is unmatched."</p>
+          <p class="testimonial-author">- Rajesh Kumar, Business Owner</p>
+        </div>
+        <div class="testimonial">
+          <p class="testimonial-text">"The team went above and beyond to meet our requirements. Highly recommended for all printing needs."</p>
+          <p class="testimonial-author">- Priya Sharma, Marketing Manager</p>
+        </div>
+        <div class="testimonial">
+          <p class="testimonial-text">"Great experience working with Media Masters. They understand the local market and deliver accordingly."</p>
+          <p class="testimonial-author">- Amit Singh, Restaurant Owner</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="team-section" id="team">
+    <div class="container">
+      <h2 class="section-title">Our Team</h2>
+      <div class="team-grid">
+        <div class="team-member">
+          <div class="member-image">
+            <img src="https://via.placeholder.com/150" alt="Amit Sharma">
+          </div>
+          <div class="member-info">
+            <h3 class="member-name">Amit Sharma</h3>
+            <p class="member-role">Founder & CEO</p>
+            <div class="member-contact">
+              <a href="mailto:mediamastersads@gmail.com" title="Email"><i class="fas fa-envelope"></i></a>
+              <a href="tel:+919855779xxx" title="Call"><i class="fas fa-phone"></i></a>
+              <a href="https://wa.me/919855779xxx" title="WhatsApp" target="_blank"><i class="fab fa-whatsapp"></i></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="team-member">
+          <div class="member-image">
+            <img src="https://via.placeholder.com/150" alt="Rahul Kumar">
+          </div>
+          <div class="member-info">
+            <h3 class="member-name">Rahul Kumar</h3>
+            <p class="member-role">Design Lead</p>
+            <div class="member-contact">
+              <a href="mailto:design@mediamasters.com" title="Email"><i class="fas fa-envelope"></i></a>
+              <a href="tel:+919876543xxx" title="Call"><i class="fas fa-phone"></i></a>
+              <a href="https://wa.me/919876543xxx" title="WhatsApp" target="_blank"><i class="fab fa-whatsapp"></i></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="team-member">
+          <div class="member-image">
+            <img src="https://via.placeholder.com/150" alt="Priya Verma">
+          </div>
+          <div class="member-info">
+            <h3 class="member-name">Priya Verma</h3>
+            <p class="member-role">Client Relations Manager</p>
+            <div class="member-contact">
+              <a href="mailto:support@mediamasters.com" title="Email"><i class="fas fa-envelope"></i></a>
+              <a href="tel:+919898765xxx" title="Call"><i class="fas fa-phone"></i></a>
+              <a href="https://wa.me/919898765xxx" title="WhatsApp" target="_blank"><i class="fab fa-whatsapp"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="contact-section" id="contact">
+    <div class="contact-container">
+      <div class="contact-info">
+        <h2>Contact Us</h2>
+        <p><i class="fas fa-user"></i> <strong>Amit Sharma</strong></p>
+        <p><i class="fas fa-phone"></i> +91-9855-77-9xxx</p>
+        <p><i class="fas fa-map-marker-alt"></i> SCO 6, 1st Floor, Veer Shopping Complex, VIP Road, Zirakpur</p>
+        <p><i class="fas fa-envelope"></i> <a href="mailto:mediamastersads@gmail.com">mediamastersads@gmail.com</a></p>
+        <p><i class="fas fa-envelope"></i> <a href="mailto:outdoor.zrk@gmail.com">outdoor.zrk@gmail.com</a></p>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-facebook"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-whatsapp"></i></a>
+        </div>
+      </div>
+      <div class="contact-form">
+        <h2>Send us a Message</h2>
+        <form>
+          <div class="form-group">
+            <input type="text" placeholder="Your Name" required>
+          </div>
+          <div class="form-group">
+            <input type="email" placeholder="Your Email" required>
+          </div>
+          <div class="form-group">
+            <input type="tel" placeholder="Your Phone">
+          </div>
+          <div class="form-group">
+            <textarea placeholder="Your Message" required></textarea>
+          </div>
+          <button type="submit" class="submit-btn">Send Message</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="back-to-top">
+    <i class="fas fa-arrow-up"></i>
+  </div>
+
+  <script>
+    // Loading screen
+    window.addEventListener('load', () => {
+      const loadingScreen = document.querySelector('.loading-screen');
+      loadingScreen.classList.add('fade-out');
+      setTimeout(() => {
+        loadingScreen.style.display = 'none';
+      }, 500);
+    });
+
+    // Smooth scroll for navigation links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
+    });
+
+    // Back to top button
+    const backToTop = document.querySelector('.back-to-top');
+    
+    window.addEventListener('scroll', () => {
+      if (window.pageYOffset > 300) {
+        backToTop.classList.add('visible');
+      } else {
+        backToTop.classList.remove('visible');
+      }
+    });
+
+    backToTop.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+  </script>
+</body>
+</html>
